@@ -1,0 +1,4 @@
+.env
+mykey.json
+node_modules
+cors-config.json

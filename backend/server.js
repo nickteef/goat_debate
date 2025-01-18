@@ -3,8 +3,13 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import { connectDB } from './config/db.js';
 
-// import routes
-import productRoutes from './routes/productRoutes.js'
+// Import routes
+import playerRoutes from './routes/playerRoutes.js';
+import gameStatsRoutes from './routes/gameStatsRoutes.js';
+import seasonStatsRoutes from './routes/seasonStatsRoutes.js';
+import salaryRoutes from './routes/salaryRoutes.js';
+import allStarStatsRoutes from './routes/allStarStatsRoutes.js';
+import gameHighsRoutes from './routes/gameHighsRoutes.js';
 
 dotenv.config(); // Only needs to be configured once
 
@@ -18,7 +23,13 @@ app.use(express.json());
 app.use(cors());
 
 // Middleware for models
-app.use('/api/products', productRoutes);
+app.use('/api/allstar-stats', allStarStatsRoutes);
+app.use('/api/game-highs', gameHighsRoutes);
+app.use('/api/game-stats', gameStatsRoutes);
+app.use('/api/players', playerRoutes);
+app.use('/api/salaries', salaryRoutes);
+app.use('/api/season-stats', seasonStatsRoutes);
+
 
 // Production 
 if (process.env.NODE_ENV === 'production') {
@@ -33,7 +44,7 @@ app.get("/", async (req, res) => {
     res.send("Server is ready");
 })
 
-app.listen(5000, () => {
-    connectDB();
-    console.log('Server started at http://localhost:5000')
+app.listen(5000, async () => {
+  await connectDB();
+  console.log('Server started at http://localhost:5000');
 });
