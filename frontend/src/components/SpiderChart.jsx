@@ -6,14 +6,13 @@ const SpiderChart = () => {
   const [selectedPlayers, setSelectedPlayers] = useState([]);
   const [selectedStats, setSelectedStats] = useState(["Points", "Rebounds", "Assists"]);
 
-  // Pridobi podatke iz API-ja
+  // Fetch data
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch("http://localhost:5000/api/game-highs");
         const data = await response.json();
 
-        // Obdelava career highs
         const playerHighs = {};
         data.forEach((game) => {
           const player = game.Player;
@@ -32,7 +31,7 @@ const SpiderChart = () => {
         });
 
         setCareerHighs(Object.values(playerHighs));
-        setSelectedPlayers(Object.values(playerHighs).map((player) => player.name)); // Privzeto vsi igralci
+        setSelectedPlayers(Object.values(playerHighs).map((player) => player.name));
       } catch (error) {
         console.error("Error fetching career highs:", error);
       }
@@ -53,7 +52,6 @@ const SpiderChart = () => {
     const numAxes = selectedStats.length;
     const angleStep = (2 * Math.PI) / numAxes;
 
-    // Nariši mrežo (5 nivojev)
     p5.stroke(100);
     p5.strokeWeight(1);
     for (let level = 1; level <= 5; level++) {
@@ -68,7 +66,6 @@ const SpiderChart = () => {
       p5.endShape(p5.CLOSE);
     }
 
-    // Nariši osi in oznake
     selectedStats.forEach((stat, i) => {
       const angle = i * angleStep - Math.PI / 2;
       const x = maxRadius * Math.cos(angle);
@@ -82,7 +79,6 @@ const SpiderChart = () => {
       p5.text(stat, x * 1.2, y * 1.2);
     });
 
-    // Nariši podatke za izbrane igralce
     const colors = [
       p5.color(66, 135, 245, 150),
       p5.color(245, 66, 87, 150),
@@ -99,13 +95,12 @@ const SpiderChart = () => {
       p5.beginShape();
       selectedStats.forEach((stat, i) => {
         const value = player[stat] || 0;
-        const normalizedValue = value / 100; // Normaliziraj vrednosti
+        const normalizedValue = value / 100; 
         const angle = i * angleStep - Math.PI / 2;
         const x = maxRadius * normalizedValue * Math.cos(angle);
         const y = maxRadius * normalizedValue * Math.sin(angle);
         p5.vertex(x, y);
 
-        // Oznake vrednosti
         p5.noStroke();
         p5.fill(255);
         p5.textSize(12);

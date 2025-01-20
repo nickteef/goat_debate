@@ -4,12 +4,12 @@ import mongoose from 'mongoose';
 // Define the schema for a Player
 const playerSchema = mongoose.Schema(
   {
-    name: { type: String, required: true, unique: true }, // The player's name; must be unique to avoid duplicates
-    position: { type: String }, // The player's position (e.g., SG, SF, PG, etc.)
-    team: { type: String }, // The team the player belongs to (optional)
+    name: { type: String, required: true, unique: true }, 
+    position: { type: String }, 
+    team: { type: String },
   },
   {
-    timestamps: true, // Automatically adds createdAt and updatedAt fields
+    timestamps: true, 
   }
 );
 

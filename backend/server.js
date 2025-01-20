@@ -10,8 +10,9 @@ import seasonStatsRoutes from './routes/seasonStatsRoutes.js';
 import salaryRoutes from './routes/salaryRoutes.js';
 import allStarStatsRoutes from './routes/allStarStatsRoutes.js';
 import gameHighsRoutes from './routes/gameHighsRoutes.js';
+import votesRoutes from './routes/votesRoutes.js';
 
-dotenv.config(); // Only needs to be configured once
+dotenv.config();
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use('/api/game-stats', gameStatsRoutes);
 app.use('/api/players', playerRoutes);
 app.use('/api/salaries', salaryRoutes);
 app.use('/api/season-stats', seasonStatsRoutes);
+app.use("/api/votes", votesRoutes);
 
 
 // Production 

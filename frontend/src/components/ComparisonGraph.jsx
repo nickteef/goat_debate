@@ -3,7 +3,7 @@ import Sketch from "react-p5";
 
 const ComparisonGraph = () => {
   const [playerData, setPlayerData] = useState([]);
-  const [selectedMetric, setSelectedMetric] = useState("Total Salaries"); // Privzeta metrika
+  const [selectedMetric, setSelectedMetric] = useState("Total Salaries"); 
 
   useEffect(() => {
     const fetchData = async () => {
@@ -15,14 +15,14 @@ const ComparisonGraph = () => {
         const response = await fetch(endpoint);
         const data = await response.json();
 
-        // Združi podatke za vsakega igralca glede na metriko
+        // Aggregate data for each player based on selected metric
         const aggregatedData =
           selectedMetric === "Total Salaries"
             ? data.reduce((acc, salary) => {
                 const player = salary.Player;
                 const rawSalary = salary.Salary || "0";
 
-                // Odstrani znak dolarja in pretvori v število
+                // Remove dollar sign and parse to float number
                 const numericSalary = parseFloat(rawSalary.replace(/\$/g, ""));
                 acc[player] = (acc[player] || 0) + numericSalary;
                 return acc;
@@ -30,25 +30,24 @@ const ComparisonGraph = () => {
             : data.reduce((acc, game) => {
                 const player = game.Player;
 
-                if (!acc[player]) acc[player] = 0; // Inicializacija za igralca
+                if (!acc[player]) acc[player] = 0;
 
-                // Logika za Total Games in Total Wins
+                // Logic for Total Games and Total Wins
                 if (selectedMetric === "Total Games") {
-                  acc[player] += 1; // Preštej število zapisov
+                  acc[player] += 1; 
                 } else if (
                   selectedMetric === "Total Wins" &&
                   game.Result === "W"
                 ) {
-                  acc[player] += 1; // Preštej zmage
+                  acc[player] += 1;
                 } else {
-                  // Druge metrike
+                  // Other metrics
                   const value = parseFloat(game[selectedMetric] || 0);
                   acc[player] += value;
                 }
                 return acc;
               }, {});
 
-        // Pretvori objekt v seznam
         const players = Object.keys(aggregatedData).map((player) => ({
           name: player,
           total: aggregatedData[player],
@@ -63,15 +62,16 @@ const ComparisonGraph = () => {
     fetchData();
   }, [selectedMetric]);
 
+  // Function for formatting numeral values
   const formatNumber = (num) => {
     if (num >= 1e6) {
-      return `$${(num / 1e6).toFixed(1)}M`; // Prikaz v milijonih (za Salaries)
+      return `$${(num / 1e6).toFixed(1)}M`;
     }
-    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."); // Dodaj piko kot tisoč separator
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."); 
   };
 
   const setup = (p5, canvasParentRef) => {
-    p5.createCanvas(450, 400).parent(canvasParentRef); // Povečaj širino platna
+    p5.createCanvas(450, 400).parent(canvasParentRef);
   };
 
   const draw = (p5) => {
@@ -82,14 +82,14 @@ const ComparisonGraph = () => {
     const maxTotal = Math.max(...playerData.map((p) => p.total));
     const offsetX = margin + 40;
 
-    // Definicija barv za igralce
+    // Definitions of player's colors
     const colors = {
-      "Michael Jordan": p5.color(200, 75, 75), // Umirjena rdeča
-      "Kobe Bryant": p5.color(100, 50, 150), // Temno vijolična
-      "LeBron James": p5.color(210, 170, 50), // Zlato-rumena
+      "Michael Jordan": p5.color(200, 75, 75), 
+      "Kobe Bryant": p5.color(100, 50, 150), 
+      "LeBron James": p5.color(210, 170, 50), 
     };
 
-    // Y-os z označbami in mrežo
+    // Y-axis with markings and grid
     p5.stroke(100);
     for (let i = 0; i <= 5; i++) {
       const y = p5.map(i, 0, 5, p5.height - margin, margin);
@@ -101,13 +101,13 @@ const ComparisonGraph = () => {
       p5.text(
         selectedMetric === "Total Salaries"
           ? formatNumber(value)
-          : formatNumber(Math.round(value)), // Zaokroži za ostale metrike
+          : formatNumber(Math.round(value)),
         offsetX - 10,
         y
       );
     }
 
-    // Stolpci
+    // Colums
     playerData.forEach((player, index) => {
       const x = offsetX + index * (barWidth + 30);
       const barHeight = p5.map(
@@ -118,17 +118,16 @@ const ComparisonGraph = () => {
         p5.height - 2 * margin
       );
 
-      // Stolpec
       p5.fill(colors[player.name] || p5.color(150));
       p5.rect(x, p5.height - margin, barWidth, -barHeight);
 
-      // Ime igralca
+      // Player name
       p5.fill(200);
       p5.textSize(12);
       p5.textAlign(p5.CENTER, p5.BOTTOM);
       p5.text(player.name, x + barWidth / 2, p5.height - margin + 15);
 
-      // Vrednost metrike
+      // Metric value
       p5.textAlign(p5.CENTER, p5.BOTTOM);
       p5.text(
         formatNumber(player.total),
@@ -137,7 +136,7 @@ const ComparisonGraph = () => {
       );
     });
 
-    // Os X
+    // X-axis
     p5.stroke(200);
     p5.line(
       offsetX,

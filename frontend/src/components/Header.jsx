@@ -13,11 +13,10 @@ function Header() {
       className="relative flex items-center justify-center"
       style={{ backgroundColor: "rgb(50, 49, 56)", height: "120px" }}
     >
-      {/* Logo na sredini */}
       <img
-        src="/logo.png" // Nadomesti z dejansko lokacijo logotipa
+        src="/logo.png"
         alt="GOAT Logo"
-        className="h-24 w-auto" // Povečaj logotip
+        className="h-24 w-auto"
       />
 
       {/* About Icon */}

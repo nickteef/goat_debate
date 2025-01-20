@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 function Players() {
   const [players, setPlayers] = useState([]);
 
+  // Fetch data
   useEffect(() => {
     const fetchPlayers = async () => {
       try {

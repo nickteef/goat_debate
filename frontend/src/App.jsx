@@ -6,9 +6,9 @@ import Header from "./components/Header.jsx";
 import Hero from "./components/Hero.jsx";
 import CareerHighs from "./components/CareerHighs.jsx";
 import ComparisonGraph from "./components/ComparisonGraph.jsx";
-import SpiderChart from "./components/SpiderChart.jsx";
 import SeasonStatsChart from "./components/SeasonStatsChart.jsx";
 import AllStarStatsChart from "./components/AllStarStatsChart.jsx";
+import SpiderChart from "./components/SpiderChart.jsx";
 
 function App() {
   return (
