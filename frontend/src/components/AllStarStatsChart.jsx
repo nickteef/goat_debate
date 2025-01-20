@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Sketch from "react-p5";
 
-const SeasonStatsChart = () => {
+const AllStarStatsChart = () => {
   const [seasonStats, setSeasonStats] = useState([]);
-  const [selectedRSorPO, setSelectedRSorPO] = useState("Regular Season");
   const [selectedPlayer, setSelectedPlayer] = useState("LeBron James");
   const [selectedStats, setSelectedStats] = useState(["PTS"]);
 
@@ -11,17 +10,15 @@ const SeasonStatsChart = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/season-stats");
+        const response = await fetch("http://localhost:5000/api/allstar-stats");
         const data = await response.json();
 
         setSeasonStats(data);
 
-        // Nastavi privzete vrednosti za igralca in sezono
+        // Nastavi privzete vrednosti za igralca
         if (data.length > 0) {
           const defaultPlayer = data[0].Player; // Privzeti prvi igralec v podatkih
-          const defaultRSorPO = data[0].RSorPO; // Privzeti prvi tip sezone
           setSelectedPlayer(defaultPlayer);
-          setSelectedRSorPO(defaultRSorPO);
         }
       } catch (error) {
         console.error("Error fetching season stats:", error);
@@ -40,14 +37,11 @@ const SeasonStatsChart = () => {
     p5.translate(50, p5.height - 50);
 
     let hoveredPoint = null;
-
-    if (!selectedPlayer || !selectedRSorPO) return;
+    
+    if (!selectedPlayer) return;
 
     const playerStats = seasonStats
-      .filter(
-        (stat) =>
-          stat.Player === selectedPlayer && stat.RSorPO === selectedRSorPO
-      )
+      .filter((stat) => stat.Player === selectedPlayer)
       .sort((a, b) => a.Season.localeCompare(b.Season));
 
     if (playerStats.length === 0) return;
@@ -139,22 +133,9 @@ const SeasonStatsChart = () => {
   return (
     <div>
       <h2 className="text-center text-3xl font-bold mb-6">
-        Season Stats Over Time
+        All-Star Stats Over Time
       </h2>
       <div className="flex justify-center space-x-4 mb-4">
-        <select
-          value={selectedRSorPO}
-          onChange={(e) => setSelectedRSorPO(e.target.value)}
-          className="p-2 bg-gray-800 text-white rounded"
-        >
-          {[...new Set(seasonStats.map((stat) => stat.RSorPO))].map(
-            (rsorpo) => (
-              <option key={rsorpo} value={rsorpo}>
-                {rsorpo}
-              </option>
-            )
-          )}
-        </select>
         <select
           value={selectedPlayer}
           onChange={(e) => setSelectedPlayer(e.target.value)}
@@ -193,4 +174,4 @@ const SeasonStatsChart = () => {
   );
 };
 
-export default SeasonStatsChart;
+export default AllStarStatsChart;

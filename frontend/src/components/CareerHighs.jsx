@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const Graph = () => {
+const CareerHighs = () => {
   const [careerHighs, setCareerHighs] = useState([]);
 
   // Pridobi podatke iz API-ja in obdelaj career highs
@@ -67,4 +67,4 @@ const Graph = () => {
   );
 };
 
-export default Graph;
+export default CareerHighs;
